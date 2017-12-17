@@ -106,19 +106,39 @@
       <ul class="sidebar-menu">
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>
-        <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>
-        <li class="treeview">
-          <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+        <li class="treeview" :class="{'active': nowIndex == 1}" @click="nowIndex = 1">
+          <a href="#"><i class="fa fa-link"></i> <span>课程</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>  
+          <ul class="treeview-menu">
+            <li v-for="item in courseList"><router-link to="/user">{{item.name}}</router-link></li>
+          </ul>
+        </li>
+
+        <li class="treeview" :class="{'active': nowIndex == 2}" @click="nowIndex = 2">
+          <a href="#"><i class="fa fa-link"></i> <span>班级</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">Link in level 2</a></li>
-            <li><a href="#">Link in level 2</a></li>
+            <li v-for="item in classList"><a href="#">{{item.name}}</a></li>
           </ul>
         </li>
+
+        <li class="treeview" :class="{'active': nowIndex == 3}" @click="nowIndex = 3">
+          <a href="#"><i class="fa fa-link"></i> <span>学生</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li v-for="item in majorList"><a href="#">{{item.name}}</a></li>
+          </ul>
+        </li>
+
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -240,11 +260,47 @@
 export default {
   data(){
     return {
-      name:'kiznaiver'
+      nowIndex : -1,
+      courseList:[
+        {
+          name:"计算机应用基础"
+        },
+        {
+          name:'外企工作英语1'
+        },
+        {
+          name:'大学英语-1 '
+        }
+      ],
+      classList:[
+        {
+          name:"土木2010-03班"
+        },
+        {
+          name:'计科2011-02班'
+        },
+        {
+          name:'电商专科2010-01班'
+        }
+      ],
+      majorList:[
+        {
+          name:'土木工程系'.slice(0,-1)
+        },
+        {
+          name:'计算机科学与软件工程系'.slice(0,-1)
+        },
+        {
+          name:'计算机科学与软件工程系'.slice(0,-1)
+        }
+      ]
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
+.active-small{
+  color: white;
+}
 </style>
