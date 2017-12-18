@@ -7,9 +7,9 @@
     <!-- Logo -->
     <a href="index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      <span class="logo-mini"><b>S</b>A</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <span class="logo-lg"><b>Score</b>analyse</span>
     </a>
 
     <!-- Header Navbar -->
@@ -61,7 +61,7 @@
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="../login.html" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -104,41 +104,22 @@
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
-        <li class="header">HEADER</li>
+        <li class="header">功能</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="treeview" :class="{'active': nowIndex == 1}" @click="nowIndex = 1">
-          <a href="#"><i class="fa fa-link"></i> <span>课程</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>  
-          <ul class="treeview-menu">
-            <li v-for="item in courseList"><router-link to="/user">{{item.name}}</router-link></li>
-          </ul>
-        </li>
-
-        <li class="treeview" :class="{'active': nowIndex == 2}" @click="nowIndex = 2">
-          <a href="#"><i class="fa fa-link"></i> <span>班级</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+        <li>
+          <a href="pages/widgets.html">
+            <i class="fa fa-th"></i> <span>导入数据</span>
           </a>
-          <ul class="treeview-menu">
-            <li v-for="item in classList"><a href="#">{{item.name}}</a></li>
-          </ul>
         </li>
-
-        <li class="treeview" :class="{'active': nowIndex == 3}" @click="nowIndex = 3">
-          <a href="#"><i class="fa fa-link"></i> <span>学生</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
+        <li>
+          <a href="pages/widgets.html">
+            <i class="fa fa-th"></i> <span>成绩分析系统</span>
           </a>
-          <ul class="treeview-menu">
-            <li v-for="item in majorList"><a href="#">{{item.name}}</a></li>
-          </ul>
         </li>
-
+        <li class="header">关于</li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -147,19 +128,6 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Page Header
-        <small>Optional description</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-        <li class="active">Here</li>
-      </ol>
-    </section>
-
-    <!-- 待补充的文本区 -->
     <section class="content">
       <router-view></router-view>
     </section>
@@ -260,6 +228,7 @@
 export default {
   data(){
     return {
+      state : 1 ,
       nowIndex : -1,
       courseList:[
         {
@@ -267,9 +236,6 @@ export default {
         },
         {
           name:'外企工作英语1'
-        },
-        {
-          name:'大学英语-1 '
         }
       ],
       classList:[
@@ -300,7 +266,7 @@ export default {
 </script>
 
 <style scoped>
-.active-small{
-  color: white;
+.move-top{
+  margin-top: 20px;
 }
 </style>
