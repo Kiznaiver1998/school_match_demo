@@ -10,7 +10,7 @@
             <div class="col-md-3">
               <div class="form-group">
                 <label>关键词</label>
-                <input class="form-control" type="text" placeholder="请输入关键词" v-model="keywords">
+                <input class="form-control" type="text" placeholder="请输入关键词" v-model="tempwords" @keydown.enter="jump">
               </div>
               <!-- /.form-group -->
             </div>
@@ -34,26 +34,53 @@
         </div>
         <!-- /.box-body -->
       </div>
-      <charts :keywords="keywords" :choose="choose"></charts>
+      <keep-alive>
+         <result :keywords="keywords" :choose="choose" :courseList="courseList" ></result>
+      </keep-alive>
   </div>
 </template>
 
 <script>
-import Charts from './Charts.vue'
+import Result from './Result.vue'
+import axios from 'axios'
 export default {
   components:{
-      Charts
+      Result
   },
   data () {
     return {
+      tempwords:'',
       keywords:'',
-      choose:'课程'
+      choose:'课程',
+      courseList : [],
+      page:1
     }
   },
   methods:{
     jump(){
-      this.$router.push({path:'s',query:{name:this.keywords , choose: this.choose}})
+      this.keywords = this.tempwords
+      this.query()
+      this.tempwords = ""
+    },
+    query(){
+        axios.get('/courses',{
+        params:{
+          keywords:this.keywords,
+          page:1,
+          pageSize:10
+        }
+      }).then((response)=>{
+        let res =response.data;
+        if(res.status == '0'){
+            this.courseList = res.result.list;
+        }else{
+          this.courseList = [];
+        }
+      })
     }
+  },
+  mounted(){
+    this.query()
   }
 }
 </script>

@@ -26,14 +26,14 @@
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="dist/img/user10.jpg" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">Alexander Pierce</span>
+              <span class="hidden-xs">张老师</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="dist/img/user10.jpg" class="img-circle" alt="User Image">
 
                 <p>
                   Alexander Pierce - Web Developer
@@ -81,10 +81,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="dist/img/user10.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p>张老师</p>
           <!-- Status -->
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
@@ -107,19 +107,19 @@
         <li class="header">功能</li>
         <!-- Optionally, you can add icons to the links -->
         <li>
-          <a href="pages/widgets.html">
-            <i class="fa fa-th"></i> <span>导入数据</span>
-          </a>
+          <router-link to="/in">
+            <i class="fa fa-th move-top"></i> <span>导入数据</span>
+          </router-link>
         </li>
         <li>
-          <a href="pages/widgets.html">
+          <router-link to="/scores">
             <i class="fa fa-th"></i> <span>成绩分析系统</span>
-          </a>
+          </router-link>
         </li>
-        <li class="header">关于</li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+        <li class="header move-top">关于</li>
+        <li><router-link to="/about"><i class="fa fa-circle-o text-red"></i> <span>关于系统</span></router-link></li>
+        <li><router-link to="/feedback"><i class="fa fa-circle-o text-yellow"></i> <span>意见反馈</span></router-link></li>
+        <li><router-link to="/history"><i class="fa fa-circle-o text-aqua"></i> <span>历史记录</span></router-link></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -267,6 +267,6 @@ export default {
 
 <style scoped>
 .move-top{
-  margin-top: 20px;
+  margin-top: 10px;
 }
 </style>
