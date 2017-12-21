@@ -6,6 +6,7 @@ import About from '@/components/About'
 import History from '@/components/History'
 import FeedBack from '@/components/FeedBack'
 import Charts from '@/components/Charts'
+import CommonCharts from '@/components/Common-Charts'
 
 Vue.use(Router)
 
@@ -35,9 +36,13 @@ export default new Router({
       path:'/scores/charts',
       component:Charts
     },
-    // {
-    //   path: '*',
-    //   redirect:'/scores'
-    // }
+    {
+      path:'/scores/commoncharts',
+      component:CommonCharts
+    },
+    {
+      path: '*',
+      redirect:'/scores'
+    }
   ]
 })

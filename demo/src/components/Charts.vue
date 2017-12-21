@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div id="mainCharts" >
 	<section class="content-header">
       <h1>
         <b>{{$route.query.courseName}}</b>成绩分析
@@ -63,14 +63,20 @@
 
     </section>
 	<hr>
+	<div>
+		
+	</div>
 	<button class="btn btn-danger col-md-offset-11">导出为pdf</button>
 	</div>
 </template>
 
 <script>
+
 import echarts from 'echarts'
 import ecStat from 'echarts-stat'
 import axios from 'axios'
+import jsPDF from '../../dist/js/jsPDF.debug.js'
+import html2canvas from '../../dist/js/html2canvas.js'
 	export default{
 		data(){
 			return{
@@ -97,7 +103,47 @@ import axios from 'axios'
 			        s += '0'; 
 			      } 
 			      return s; 
-			    } 
+			 },
+			 changePDF(){
+         		html2canvas(document.getElementById('mainCharts'), {
+				  onrendered:function(canvas) {
+
+				      var contentWidth = canvas.width;
+				      var contentHeight = canvas.height;
+
+				      //一页pdf显示html页面生成的canvas高度;
+				      var pageHeight = contentWidth / 592.28 * 841.89;
+				      //未生成pdf的html页面高度
+				      var leftHeight = contentHeight;
+				      //页面偏移
+				      var position = 0;
+				      //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+				      var imgWidth = 595.28;
+				      var imgHeight = 592.28/contentWidth * contentHeight;
+
+
+				      var pdf = new jsPDF('', 'pt', 'a4');
+
+				      //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+				      //当内容未超过pdf一页显示的范围，无需分页
+				      if (leftHeight < pageHeight) {
+					  pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
+				      } else {
+					      while(leftHeight > 0) {
+					          pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+					          leftHeight -= pageHeight;
+					          position -= 841.89;
+					          //避免添加空白页
+					          if(leftHeight > 0) {
+						        pdf.addPage();
+					          }
+					      }
+				      }
+
+      pdf.save('content.pdf');
+  }
+})
+         	}
 		},
 		mounted(){
 		axios.get('/courses',{ params:{
@@ -168,26 +214,73 @@ import axios from 'axios'
 			    },
 			    series: [
 			        {
-			            name:'学生人数',
+			            name:'成绩分布',
 			            type:'pie',
-			            radius: ['50%', '70%'],
+			            selectedMode: 'single',
+			            radius: [0, '30%'],
 			            avoidLabelOverlap: false,
 			            label: {
 			                normal: {
-			                    show: false,
-			                    position: 'center'
-			                },
-			                emphasis: {
-			                    show: true,
-			                    textStyle: {
-			                        fontSize: '30',
-			                        fontWeight: 'bold'
-			                    }
+			                    position: 'inner'
 			                }
 			            },
 			            labelLine: {
 			                normal: {
 			                    show: false
+			                }
+			            },
+			            data:[
+
+			                {value:dx, name:'优秀率'},
+			                {value:cx+bx, name:'良好率'}
+			            ]
+			        },
+			        {
+			            name:'成绩分布',
+			            type:'pie',
+			            radius: ['40%', '55%'],
+			            label: {
+			                normal: {
+			                    formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+			                    backgroundColor: '#eee',
+			                    borderColor: '#aaa',
+			                    borderWidth: 1,
+			                    borderRadius: 4,
+			                    // shadowBlur:3,
+			                    // shadowOffsetX: 2,
+			                    // shadowOffsetY: 2,
+			                    // shadowColor: '#999',
+			                    // padding: [0, 7],
+			                    rich: {
+			                        a: {
+			                            color: '#999',
+			                            lineHeight: 22,
+			                            align: 'center'
+			                        },
+			                        // abg: {
+			                        //     backgroundColor: '#333',
+			                        //     width: '100%',
+			                        //     align: 'right',
+			                        //     height: 22,
+			                        //     borderRadius: [4, 4, 0, 0]
+			                        // },
+			                        hr: {
+			                            borderColor: '#aaa',
+			                            width: '100%',
+			                            borderWidth: 0.5,
+			                            height: 0
+			                        },
+			                        b: {
+			                            fontSize: 16,
+			                            lineHeight: 33
+			                        },
+			                        per: {
+			                            color: '#eee',
+			                            backgroundColor: '#334455',
+			                            padding: [2, 4],
+			                            borderRadius: 2
+			                        }
+			                    }
 			                }
 			            },
 			            data:[
@@ -204,6 +297,11 @@ import axios from 'axios'
 
 		(function (grade) {
 			var myChart = echarts.init(document.getElementById('histogram'));
+			if(grade.length<=1)
+			{
+				myChart.innerHTML="只有一个学生，无法分析"
+				return
+			}
 			var girth = grade;
 
 			// See https://github.com/ecomfe/echarts-stat

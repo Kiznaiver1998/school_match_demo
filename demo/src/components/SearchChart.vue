@@ -29,14 +29,15 @@
             <div class="col-md-2 move">
                 <button class="btn btn-primary" @click="jump"><i class="fa fa-search"></i></button>
             </div>
+            <div class="col-md-3 move col-md-offset-2">
+                <router-link to="/scores/commoncharts" tag="button" class="btn btn-danger">课程联合分析</router-link>
+            </div>
           </div>
           <!-- /.row -->
         </div>
         <!-- /.box-body -->
       </div>
-      <keep-alive>
-         <result :keywords="keywords" :choose="choose" :courseList="courseList" ></result>
-      </keep-alive>
+         <result :keywords="keywords" :choose="choose" :courseList="courseList" :isLast="isLast" :page="page" @nPage="changen" @pPage="changep"></result>
   </div>
 </template>
 
@@ -53,17 +54,18 @@ export default {
       keywords:'',
       choose:'课程',
       courseList : [],
-      page:1
+      page:1,
+      isLast:false
     }
   },
   methods:{
     jump(){
       this.keywords = this.tempwords
-      this.query()
+      this.queryk()
       this.tempwords = ""
     },
-    query(){
-        axios.get('/courses',{
+    queryk(){
+      axios.get('/courses',{
         params:{
           keywords:this.keywords,
           page:1,
@@ -73,10 +75,41 @@ export default {
         let res =response.data;
         if(res.status == '0'){
             this.courseList = res.result.list;
+            if(this.courseList.length < 10)
+            {
+              this.isLast = true
+            }
         }else{
           this.courseList = [];
         }
       })
+    },
+    query(){
+        axios.get('/courses',{
+        params:{
+          page:this.page,
+          pageSize:10
+        }
+      }).then((response)=>{
+        let res =response.data;
+        if(res.status == '0'){
+            this.courseList = res.result.list;
+            if(this.courseList.length < 10)
+            {
+              this.isLast = true
+            }
+        }else{
+          this.courseList = [];
+        }
+      })
+    },
+    changen(){
+      this.page++
+      this.query()
+    },
+    changep(){
+      this.page--
+      this.query()
     }
   },
   mounted(){
